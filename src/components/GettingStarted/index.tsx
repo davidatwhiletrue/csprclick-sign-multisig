@@ -32,9 +32,9 @@ export const SignedInBrief = () => {
 
 	const handleSignMessage = async () => {
 		const tbs = "Hello Torus user!";
-		const signingKey = await clickRef?.getActivePublicKey() || '';
+		const signingKey = await clickRef?.getActiveAccount();;
 
-		const result = await clickRef?.signMessage(tbs, signingKey )
+		const result = await clickRef?.signMessage(tbs, signingKey?.public_key  || '' )
 		console.info("RESULT", result);
 		return false;
 	}

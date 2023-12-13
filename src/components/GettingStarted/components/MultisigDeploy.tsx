@@ -43,12 +43,12 @@ function MultisigDeploy() {
   }
 
   const signAndSend = async (deploy: Deploy) => {
-	const signingKey = await clickRef?.getActivePublicKey() || '';
+	const signingKey = await clickRef?.getActiveAccount();
     const jsonDeploy = DeployUtil.deployToJson(deploy);
 
       // @ts-ignore
       window.csprclick
-        .sign(JSON.stringify(jsonDeploy.deploy), signingKey)
+        .sign(JSON.stringify(jsonDeploy.deploy), signingKey?.public_key  || '')
         .then(async (res: any) => {
             console.info(res);
           if (!res) return;
@@ -62,7 +62,7 @@ function MultisigDeploy() {
             const signedDeploy = DeployUtil.setSignature(
               deploy,
               res.signature.slice(1, 65),
-              CLPublicKey.fromHex(signingKey)
+              CLPublicKey.fromHex(signingKey?.public_key || '')
             );
 
             // save signed deploy in storage to continue adding signatures from other keys
